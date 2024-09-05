@@ -1,52 +1,49 @@
 pipeline {
     agent any
-    stages {
-        stage('Pull Code') {
-            steps {
-                echo 'Pulling code from GitHub repository'
-               
+
+    environment{
+        DIRECTORY_PATH = 'C:\\Users\\mouch\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\My_first_job'
+        TESTING_ENVIRONMENT = 'Staging'
+        PRODUCTION_ENVIRONMENT = 'Meshal'
+    }
+
+    stages{
+        stage('BUILD'){
+            steps{
+                echo "fetch the source code from $DIRECTORY_PATH"
+                echo "compile the code and generate any necessary artifact"
             }
         }
-        stage('Build') {
-            steps {
-                echo 'Building the project using Maven'
-                bat 'mvn clean install'
+        
+        stage('TEST'){
+            steps{
+                echo "unit tests"
+                echo 'integration tests'
             }
         }
-        stage('Unit and Integration Tests') {
-            steps {
-                echo 'Running Unit and Integration tests using JUnit and Selenium'
-                bat 'mvn test'
+
+        stage('CODE QUALITY CHECK'){
+            steps{
+                echo "check the quality of the code"
             }
         }
-        stage('Code Analysis') {
-            steps {
-                echo 'Performing code analysis using SonarQube'
-                bat 'mvn sonar:sonar'
+
+        stage('DEPLOY'){
+            steps{
+                echo "deploy the application to a $TESTING_ENVIRONMENT"
             }
         }
-        stage('Security Scan') {
-            steps {
-                echo 'Performing security scan using OWASP Dependency Check'
-                bat 'dependency-check --project "MyProject" --scan ./'
+
+        stage('APPROVAL'){
+            steps{
+                echo "pausing for manual approval"
+                sleep (time: 10, unit : 'SECONDS') 
             }
         }
-        stage('Deploy to Staging') {
-            steps {
-                echo 'Deploying the application to AWS EC2 Staging'
-                bat 'scp target/my-app.jar user@staging-ec2-instance:/path/to/app/'
-            }
-        }
-        stage('Integration Tests on Staging') {
-            steps {
-                echo 'Running integration tests on Staging using Selenium or Postman'
-                bat 'selenium-runner --tests staging-integration-tests'
-            }
-        }
-        stage('Deploy to Production') {
-            steps {
-                echo 'Deploying the application to AWS EC2 Production'
-                bat 'scp target/my-app.jar user@production-ec2-instance:/path/to/app/'
+        
+        stage('DEPLOY TO PRODUCTION'){
+            steps{
+                echo "$PRODUCTION_ENVIRONMENT"
             }
         }
     }
