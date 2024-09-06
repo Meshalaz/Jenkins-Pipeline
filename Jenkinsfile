@@ -14,20 +14,32 @@ pipeline {
                 echo "Running unit and integration test using JUnit"
                 echo 'JUnit testing tool'
             }
-            post {
-                always {
-                    emailext(
-                        to: 'iimouchy.7@gmail.com',
-                        subject: "Jenkins Build: ${currentBuild.fullDisplayName} - Unit and Integration Tests",
-                        body: """
-                        Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) complete.
-                        Stage: Unit and Integration Tests
-                        Status: ${currentBuild.currentResult}. 
-                        Logs: ${env.BUILD_URL}/console
-                        """,
-                        attachLog: true
-                    )
-                }
+               post {
+        success {
+            emailext body: "Build ${currentBuild.fullDisplayName} succeeded",
+                     subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Successful",
+                     to: 'iimouchy.7@gmail.com',
+                     attachLog: true
+        }
+        failure {
+            emailext body: "Build ${currentBuild.fullDisplayName} failed",
+                     subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Failed",
+                     to: 'iimouchy.7@gmail.com',
+                     attachLog: true
+        }
+        unstable {
+            emailext body: "Build ${currentBuild.fullDisplayName} is unstable",
+                     subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Unstable",
+                     to: 'iimouchy.7@gmail.com',
+                     attachLog: true
+        }
+        always {
+            emailext body: "Build ${currentBuild.fullDisplayName} has finished with status ${currentBuild.currentResult}",
+                     subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                     to: 'iimouchy.7@gmail.com',
+                     attachLog: true
+        }
+    }
             }
         }
 
@@ -43,21 +55,32 @@ pipeline {
                 echo "Performing a security scan on the code using an OWASP tool"
                 echo "OWASP security scanning tool"
             }
-            post {
-                always {
-                    emailext(
-                        to: 'iimouchy.7@gmail.com',
-                        subject: "Jenkins Build: ${currentBuild.fullDisplayName} - Security Scan",
-                        body: """
-                        Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) complete.
-                        Stage: Security Scan
-                        Status: ${currentBuild.currentResult}. 
-                        Logs: ${env.BUILD_URL}/console
-                        """,
-                        attachLog: true
-                    )
-                }
-            }
+                   post {
+        success {
+            emailext body: "Build ${currentBuild.fullDisplayName} succeeded",
+                     subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Successful",
+                     to: 'iimouchy.7@gmail.com',
+                     attachLog: true
+        }
+        failure {
+            emailext body: "Build ${currentBuild.fullDisplayName} failed",
+                     subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Failed",
+                     to: 'iimouchy.7@gmail.com',
+                     attachLog: true
+        }
+        unstable {
+            emailext body: "Build ${currentBuild.fullDisplayName} is unstable",
+                     subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Unstable",
+                     to: 'iimouchy.7@gmail.com',
+                     attachLog: true
+        }
+        always {
+            emailext body: "Build ${currentBuild.fullDisplayName} has finished with status ${currentBuild.currentResult}",
+                     subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                     to: 'iimouchy.7@gmail.com',
+                     attachLog: true
+        }
+    }
         }
 
         stage('DEPLOY TO STAGING') {
