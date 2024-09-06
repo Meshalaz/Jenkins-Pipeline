@@ -77,7 +77,7 @@ pipeline {
             steps{
                 echo "deploying the application to a AWS EC2 server"
                 echo "AWS EC2 for production deployment"
-                echo "MESHAL ALZAHRANI"
+
             }
         }
     }
