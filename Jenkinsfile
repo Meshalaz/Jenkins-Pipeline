@@ -1,9 +1,6 @@
 pipeline {
     agent any
 
-
-    
-
     stages{
         stage('BUILD'){
             steps{
@@ -17,7 +14,23 @@ pipeline {
                 echo "Running unit and integration test using JUnit"
                 echo 'JUnit testing tool'
             }
+            
+        post {
+            always {
+                emailext(
+                    to: 'iimouchy.7@gmail.com',
+                    subject: "Jenkins Build: ${currentBuild.fullDisplayName} - Security Scan",
+                    body: """
+                    Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) complete.
+                    Stage: Unit and Integration Tests
+                    Status: ${currentBuild.currentResult}. 
+                    Logs: ${env.BUILD_URL}/console
+                    """,
+                    attachLog: true
+                    )
+            }
         }
+    }
 
         stage('CODE ANALYSIS'){
             steps{
@@ -29,7 +42,22 @@ pipeline {
             steps{
                 echo "Performing a security scan on the code using a OWASP tool"
                 echo "OWASP security scanning tool"
+         }
+        post {
+            always {
+                emailext(
+                    to: 'iimouchy.7@gmail.com',
+                    subject: "Jenkins Build: ${currentBuild.fullDisplayName} - Security Scan",
+                    body: """
+                    Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) complete.
+                    Stage: Unit and Integration Tests
+                    Status: ${currentBuild.currentResult}. 
+                    Logs: ${env.BUILD_URL}/console
+                    """,
+                    attachLog: true
+                    )
             }
+        }
           }
 
         stage('DEPLOY TO STAGING'){
