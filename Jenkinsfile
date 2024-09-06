@@ -1,49 +1,54 @@
 pipeline {
     agent any
 
-    environment{
-        DIRECTORY_PATH = 'C:\\Users\\mouch\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\My_first_job'
-        TESTING_ENVIRONMENT = 'Staging'
-        PRODUCTION_ENVIRONMENT = 'Meshal'
-    }
+
+    
 
     stages{
         stage('BUILD'){
             steps{
-                echo "fetch the source code from $DIRECTORY_PATH"
-                echo "compile the code and generate any necessary artifact"
+                echo "Building the code using Maven"
+                echo "Maven building tool"
             }
         }
         
-        stage('TEST'){
+        stage('UNIT AND INTEGRATION TESTS'){
             steps{
-                echo "unit tests"
-                echo 'integration tests'
+                echo "Running unit and integration test using JUnit"
+                echo 'JUnit testing tool'
             }
         }
 
-        stage('CODE QUALITY CHECK'){
+        stage('CODE ANALYSIS'){
             steps{
-                echo "check the quality of the code"
+                echo "Running code analysis using GitHub"
+                echo "GitHub code analysis tool"
+            }
+        }
+          stage('SECURITY SCAN'){
+            steps{
+                echo "Performing a security scan on the code using a OWASP tool"
+                echo "OWASP security scanning tool"
+            }
+          }
+
+        stage('DEPLOY TO STAGING'){
+            steps{
+                echo "deploy the application to AWS EC2 server"
+                echo "AWS EC2 for staging deployment"
             }
         }
 
-        stage('DEPLOY'){
+        stage('INTEGRATION TESTS ON STAGING'){
             steps{
-                echo "deploy the application to a $TESTING_ENVIRONMENT"
-            }
-        }
-
-        stage('APPROVAL'){
-            steps{
-                echo "pausing for manual approval"
-                sleep (time: 10, unit : 'SECONDS') 
+                echo "Running integration tests on the staging environment"
             }
         }
         
         stage('DEPLOY TO PRODUCTION'){
             steps{
-                echo "$PRODUCTION_ENVIRONMENT"
+                echo "deploying the application to a AWS EC2 server"
+                echo "AWS EC2 for production deployment"
             }
         }
     }
