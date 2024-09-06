@@ -16,19 +16,14 @@ pipeline {
             }
             
         post {
-            always {
-                emailext(
-                    to: 'iimouchy.7@gmail.com',
-                    subject: "Jenkins Build: ${currentBuild.fullDisplayName} - Security Scan",
-                    body: """
-                    Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) complete.
-                    Stage: Unit and Integration Tests
-                    Status: ${currentBuild.currentResult}. 
-                    Logs: ${env.BUILD_URL}/console
-                    """,
-                    attachLog: true
-                    )
-            }
+          
+                        always {
+            emailext body: "Build ${currentBuild.fullDisplayName} Security Scan ${currentBuild.currentResult}",
+                     subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                     to: 'iimouchy.7@gmail.com',
+                     attachLog: true
+        }
+            
         }
     }
 
